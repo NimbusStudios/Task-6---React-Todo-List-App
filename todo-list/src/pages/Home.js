@@ -29,9 +29,12 @@ const Home = () => {
   };
 
   return (
-    <div>
-      <AddTask addTask={addTask} />
-      <TodoList tasks={tasks} updateTask={updateTask} deleteTask={deleteTask} />
+    <div className="min-h-screen bg-gray-100 p-4">
+      <div className="max-w-4xl mx-auto bg-white p-6 rounded shadow-md">
+        <h1 className="text-3xl font-semibold mb-6">Todo List</h1>
+        <AddTask addTask={addTask} />
+        <TodoList tasks={tasks} updateTask={updateTask} deleteTask={deleteTask} />
+      </div>
     </div>
   );
 };

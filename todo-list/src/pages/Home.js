@@ -4,11 +4,21 @@ import AddTask from '../components/AddTask';
 
 const Home = () => {
   const [tasks, setTasks] = useState([]);
+  const [filteredTasks, setFilteredTasks] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterPriority, setFilterPriority] = useState('');
+  const [filterStatus, setFilterStatus] = useState('');
+  const [filterDueDate, setFilterDueDate] = useState('');
 
   useEffect(() => {
     const savedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
     setTasks(savedTasks);
+    setFilteredTasks(savedTasks);
   }, []);
+
+  useEffect(() => {
+    filterTasks();
+  }, [tasks, searchTerm, filterPriority, filterStatus, filterDueDate]);
 
   const addTask = (task) => {
     const newTasks = [...tasks, task];
@@ -28,12 +38,63 @@ const Home = () => {
     localStorage.setItem('tasks', JSON.stringify(newTasks));
   };
 
+  const filterTasks = () => {
+    let tempTasks = [...tasks];
+
+    if (searchTerm) {
+      tempTasks = tempTasks.filter(task => task.name.toLowerCase().includes(searchTerm.toLowerCase()));
+    }
+
+    if (filterPriority) {
+      tempTasks = tempTasks.filter(task => task.priority === filterPriority);
+    }
+
+    if (filterStatus) {
+      tempTasks = tempTasks.filter(task => task.status === filterStatus);
+    }
+
+    if (filterDueDate) {
+      tempTasks = tempTasks.filter(task => task.dueDate === filterDueDate);
+    }
+
+    setFilteredTasks(tempTasks);
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 p-4">
       <div className="max-w-4xl mx-auto bg-white p-6 rounded shadow-md">
         <h1 className="text-3xl font-semibold mb-6">Todo List</h1>
         <AddTask addTask={addTask} />
-        <TodoList tasks={tasks} updateTask={updateTask} deleteTask={deleteTask} />
+
+        {/* Search and Filter Section */}
+        <div className="mb-4">
+          <input
+            type="text"
+            placeholder="Search tasks..."
+            className="p-2 border border-gray-300 rounded w-full mb-2"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <select className="p-2 border border-gray-300 rounded w-full mb-2" onChange={(e) => setFilterPriority(e.target.value)}>
+            <option value="">All Priorities</option>
+            <option value="High">High</option>
+            <option value="Medium">Medium</option>
+            <option value="Low">Low</option>
+          </select>
+          <select className="p-2 border border-gray-300 rounded w-full mb-2" onChange={(e) => setFilterStatus(e.target.value)}>
+            <option value="">All Statuses</option>
+            <option value="Incomplete">Incomplete</option>
+            <option value="Complete">Complete</option>
+          </select>
+          <input
+            type="date"
+            className="p-2 border border-gray-300 rounded w-full mb-2"
+            value={filterDueDate}
+            onChange={(e) => setFilterDueDate(e.target.value)}
+          />
+        </div>
+
+        <TodoList tasks={filteredTasks} updateTask={updateTask} deleteTask={deleteTask} />
       </div>
     </div>
   );

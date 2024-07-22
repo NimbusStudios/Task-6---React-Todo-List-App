@@ -1,9 +1,9 @@
 import React from 'react';
 
 const priorityClasses = {
-  High: 'bg-red-500 text-white',
-  Medium: 'bg-yellow-500 text-white',
-  Low: 'bg-green-500 text-white'
+  High: 'bg-red-500 text-white dark:bg-red-700',
+  Medium: 'bg-yellow-500 text-white dark:bg-yellow-700',
+  Low: 'bg-green-500 text-white dark:bg-green-700'
 };
 
 const TodoItem = ({ task, updateTask, deleteTask }) => {

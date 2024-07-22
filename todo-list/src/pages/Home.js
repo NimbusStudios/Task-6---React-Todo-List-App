@@ -61,9 +61,9 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
-      <div className="max-w-4xl mx-auto bg-white p-6 rounded shadow-md">
-        <h1 className="text-3xl font-semibold mb-6">Todo List</h1>
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 p-4">
+      <div className="max-w-4xl mx-auto bg-white dark:bg-gray-800 p-6 rounded shadow-md">
+        <h1 className="text-3xl font-semibold mb-6 dark:text-white">Todo List</h1>
         <AddTask addTask={addTask} />
 
         {/* Search and Filter Section */}
@@ -71,24 +71,30 @@ const Home = () => {
           <input
             type="text"
             placeholder="Search tasks..."
-            className="p-2 border border-gray-300 rounded w-full mb-2"
+            className="p-2 border border-gray-300 rounded w-full mb-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <select className="p-2 border border-gray-300 rounded w-full mb-2" onChange={(e) => setFilterPriority(e.target.value)}>
+          <select
+            className="p-2 border border-gray-300 rounded w-full mb-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            onChange={(e) => setFilterPriority(e.target.value)}
+          >
             <option value="">All Priorities</option>
             <option value="High">High</option>
             <option value="Medium">Medium</option>
             <option value="Low">Low</option>
           </select>
-          <select className="p-2 border border-gray-300 rounded w-full mb-2" onChange={(e) => setFilterStatus(e.target.value)}>
+          <select
+            className="p-2 border border-gray-300 rounded w-full mb-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            onChange={(e) => setFilterStatus(e.target.value)}
+          >
             <option value="">All Statuses</option>
             <option value="Incomplete">Incomplete</option>
             <option value="Complete">Complete</option>
           </select>
           <input
             type="date"
-            className="p-2 border border-gray-300 rounded w-full mb-2"
+            className="p-2 border border-gray-300 rounded w-full mb-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
             value={filterDueDate}
             onChange={(e) => setFilterDueDate(e.target.value)}
           />

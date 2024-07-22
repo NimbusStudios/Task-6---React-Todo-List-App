@@ -6,6 +6,8 @@ import Login from './pages/Login';
 import Home from './pages/Home';
 import Profile from './pages/Profile';
 import ProtectedRoute from './components/ProtectedRoute';
+import { ThemeProvider } from './contexts/ThemeContext';
+import Header from './components/Header';
 
 function App() {
   useEffect(() => {
@@ -17,17 +19,20 @@ function App() {
   }, []);
 
   return (
-    <Router>
-      <div className="font-sans">
-        <Routes>
-          <Route path="/" element={<Navigate to="/login" />} />  {/* Redirect root to login */}
-          <Route path="/register" element={<Registration />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-          <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-        </Routes>
-      </div>
-    </Router>
+    <ThemeProvider>
+      <Router>
+        <div className="font-sans">
+          <Header />
+          <Routes>
+            <Route path="/" element={<Navigate to="/login" />} />  {/* Redirect root to login */}
+            <Route path="/register" element={<Registration />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+            <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          </Routes>
+        </div>
+      </Router>
+    </ThemeProvider>
   );
 }
 

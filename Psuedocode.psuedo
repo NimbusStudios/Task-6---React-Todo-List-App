@@ -1,0 +1,223 @@
+// App.js
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Registration from './pages/Registration';
+import Login from './pages/Login';
+import Home from './pages/Home';
+import Profile from './pages/Profile';
+import ProtectedRoute from './components/ProtectedRoute';
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/register" element={<Registration />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+        <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+      </Routes>
+    </Router>
+  );
+}
+
+export default App;
+
+// ProtectedRoute.js
+import React from 'react';
+import { Navigate } from 'react-router-dom';
+
+const ProtectedRoute = ({ children }) => {
+  const isAuthenticated = !!localStorage.getItem('user');
+  return isAuthenticated ? children : <Navigate to="/login" />;
+};
+
+export default ProtectedRoute;
+
+// Registration.js
+import React, { useState } from 'react';
+
+const Registration = () => {
+  const [formData, setFormData] = useState({ username: '', password: '' });
+
+  const handleRegister = (e) => {
+    e.preventDefault();
+    localStorage.setItem('user', JSON.stringify(formData));
+    // Navigate to login page
+  };
+
+  return (
+    <form onSubmit={handleRegister}>
+      <input type="text" placeholder="Username" onChange={(e) => setFormData({ ...formData, username: e.target.value })} />
+      <input type="password" placeholder="Password" onChange={(e) => setFormData({ ...formData, password: e.target.value })} />
+      <button type="submit">Register</button>
+    </form>
+  );
+};
+
+export default Registration;
+
+// Login.js
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+const Login = () => {
+  const [formData, setFormData] = useState({ username: '', password: '' });
+  const navigate = useNavigate();
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user && user.username === formData.username && user.password === formData.password) {
+      // Navigate to home page
+      navigate('/home');
+    } else {
+      alert('Invalid credentials');
+    }
+  };
+
+  return (
+    <form onSubmit={handleLogin}>
+      <input type="text" placeholder="Username" onChange={(e) => setFormData({ ...formData, username: e.target.value })} />
+      <input type="password" placeholder="Password" onChange={(e) => setFormData({ ...formData, password: e.target.value })} />
+      <button type="submit">Login</button>
+    </form>
+  );
+};
+
+export default Login;
+
+// Home.js
+import React, { useState, useEffect } from 'react';
+import TodoList from '../components/TodoList';
+import AddTask from '../components/AddTask';
+
+const Home = () => {
+  const [tasks, setTasks] = useState([]);
+
+  useEffect(() => {
+    const savedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    setTasks(savedTasks);
+  }, []);
+
+  const addTask = (task) => {
+    const newTasks = [...tasks, task];
+    setTasks(newTasks);
+    localStorage.setItem('tasks', JSON.stringify(newTasks));
+  };
+
+  const updateTask = (updatedTask) => {
+    const newTasks = tasks.map((task) => (task.id === updatedTask.id ? updatedTask : task));
+    setTasks(newTasks);
+    localStorage.setItem('tasks', JSON.stringify(newTasks));
+  };
+
+  const deleteTask = (taskId) => {
+    const newTasks = tasks.filter((task) => task.id !== taskId);
+    setTasks(newTasks);
+    localStorage.setItem('tasks', JSON.stringify(newTasks));
+  };
+
+  return (
+    <div>
+      <AddTask addTask={addTask} />
+      <TodoList tasks={tasks} updateTask={updateTask} deleteTask={deleteTask} />
+    </div>
+  );
+};
+
+export default Home;
+
+// AddTask.js
+import React, { useState } from 'react';
+
+const AddTask = ({ addTask }) => {
+  const [task, setTask] = useState({ name: '', description: '', priority: 'Low', status: 'Incomplete', dueDate: '' });
+
+  const handleAddTask = (e) => {
+    e.preventDefault();
+    addTask({ ...task, id: Date.now() });
+    setTask({ name: '', description: '', priority: 'Low', status: 'Incomplete', dueDate: '' });
+  };
+
+  return (
+    <form onSubmit={handleAddTask}>
+      <input type="text" placeholder="Task Name" onChange={(e) => setTask({ ...task, name: e.target.value })} />
+      <input type="text" placeholder="Task Description" onChange={(e) => setTask({ ...task, description: e.target.value })} />
+      <select onChange={(e) => setTask({ ...task, priority: e.target.value })}>
+        <option value="Low">Low</option>
+        <option value="Medium">Medium</option>
+        <option value="High">High</option>
+      </select>
+      <input type="date" onChange={(e) => setTask({ ...task, dueDate: e.target.value })} />
+      <button type="submit">Add Task</button>
+    </form>
+  );
+};
+
+export default AddTask;
+
+// TodoList.js
+import React from 'react';
+import TodoItem from './TodoItem';
+
+const TodoList = ({ tasks, updateTask, deleteTask }) => {
+  return (
+    <div>
+      {tasks.map((task) => (
+        <TodoItem key={task.id} task={task} updateTask={updateTask} deleteTask={deleteTask} />
+      ))}
+    </div>
+  );
+};
+
+export default TodoList;
+
+// TodoItem.js
+import React from 'react';
+
+const TodoItem = ({ task, updateTask, deleteTask }) => {
+  return (
+    <div>
+      <h3>{task.name}</h3>
+      <p>{task.description}</p>
+      <p>Priority: {task.priority}</p>
+      <p>Due Date: {task.dueDate}</p>
+      <button onClick={() => deleteTask(task.id)}>Delete</button>
+      <button onClick={() => updateTask({ ...task, status: task.status === 'Incomplete' ? 'Complete' : 'Incomplete' })}>
+        {task.status === 'Incomplete' ? 'Mark as Complete' : 'Mark as Incomplete'}
+      </button>
+    </div>
+  );
+};
+
+export default TodoItem;
+
+// Profile.js
+import React, { useState, useEffect } from 'react';
+
+const Profile = () => {
+  const [user, setUser] = useState({ username: '', password: '' });
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user) {
+      setUser(user);
+    }
+  }, []);
+
+  const handleUpdate = (e) => {
+    e.preventDefault();
+    localStorage.setItem('user', JSON.stringify(user));
+    // Show success message
+  };
+
+  return (
+    <form onSubmit={handleUpdate}>
+      <input type="text" value={user.username} onChange={(e) => setUser({ ...user, username: e.target.value })} />
+      <input type="password" value={user.password} onChange={(e) => setUser({ ...user, password: e.target.value })} />
+      <button type="submit">Update Profile</button>
+    </form>
+  );
+};
+
+export default Profile;

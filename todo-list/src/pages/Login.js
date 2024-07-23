@@ -1,60 +1,47 @@
-// This is a functional component called Login that represents the login page of the application.
-// It uses React hooks to manage state and navigation.
-
-import React, { useState } from 'react'; // Importing the useState hook from React
-import { useNavigate } from 'react-router-dom'; // Importing the useNavigate hook from React Router DOM
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-  // Declaring a state variable called formData using the useState hook.
-  // The initial value is an object with empty strings for username and password.
   const [formData, setFormData] = useState({ username: '', password: '' });
-
-  // Declaring a variable called navigate using the useNavigate hook from React Router DOM.
-  // This allows us to navigate to different routes in the application.
+  const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
-  // Defining a function called handleLogin that will be called when the form is submitted.
   const handleLogin = (e) => {
-    // Preventing the default form submission behavior.
     e.preventDefault();
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+    const user = users.find(user => user.username === formData.username && user.password === formData.password);
 
-    // Retrieving the user data from local storage and parsing it as JSON.
-    const user = JSON.parse(localStorage.getItem('user'));
-
-    // Checking if the user exists and if the entered username and password match the stored data.
-    if (user && user.username === formData.username && user.password === formData.password) {
-      // If the credentials are valid, navigating to the home page.
+    if (user) {
+      localStorage.setItem('loggedInUser', JSON.stringify(user));
       navigate('/home');
     } else {
-      // If the credentials are invalid, displaying an alert.
-      alert('Invalid credentials');
+      setMessage('Invalid credentials');
     }
   };
 
-  // Returning the JSX for the login form.
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <form onSubmit={handleLogin} className="bg-white p-6 rounded shadow-md w-full max-w-sm">
-        <h2 className="text-2xl font-semibold mb-4">Login</h2>
+    <div className="flex justify-center items-center min-h-screen bg-gray-100 dark:bg-gray-900">
+      <form onSubmit={handleLogin} className="bg-white dark:bg-gray-800 p-6 rounded shadow-md w-full max-w-sm">
+        <h2 className="text-2xl font-semibold mb-4 dark:text-white">Login</h2>
+        {message && <p className="mb-4 text-red-500 dark:text-red-300">{message}</p>}
         <input
           type="text"
           placeholder="Username"
-          className="mb-4 p-2 border border-gray-300 rounded w-full"
-          // Updating the username value in the formData state variable whenever the input changes.
+          className="mb-4 p-2 border border-gray-300 rounded w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+          value={formData.username}
           onChange={(e) => setFormData({ ...formData, username: e.target.value })}
         />
         <input
           type="password"
           placeholder="Password"
-          className="mb-4 p-2 border border-gray-300 rounded w-full"
-          // Updating the password value in the formData state variable whenever the input changes.
+          className="mb-4 p-2 border border-gray-300 rounded w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+          value={formData.password}
           onChange={(e) => setFormData({ ...formData, password: e.target.value })}
         />
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded w-full">Login</button>
+        <button type="submit" className="bg-blue-500 text-white p-2 rounded w-full dark:bg-blue-700">Login</button>
       </form>
     </div>
   );
 };
 
 export default Login;
-

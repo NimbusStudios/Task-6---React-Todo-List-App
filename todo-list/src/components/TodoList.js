@@ -2,7 +2,7 @@ import React from 'react';
 import TodoItem from './TodoItem';
 import { AnimatePresence, motion } from 'framer-motion';
 
-const TodoList = ({ tasks, updateTask, deleteTask }) => {
+const TodoList = ({ tasks, updateTaskStatus, deleteTask, startEdit }) => {
   return (
     <motion.div layout>
       <AnimatePresence>
@@ -10,7 +10,13 @@ const TodoList = ({ tasks, updateTask, deleteTask }) => {
           <p className="text-center text-gray-500 dark:text-gray-400">No tasks found.</p>
         ) : (
           tasks.map((task) => (
-            <TodoItem key={task.id} task={task} updateTask={updateTask} deleteTask={deleteTask} />
+            <TodoItem
+              key={task.id}
+              task={task}
+              updateTaskStatus={updateTaskStatus}
+              deleteTask={deleteTask}
+              startEdit={startEdit}
+            />
           ))
         )}
       </AnimatePresence>

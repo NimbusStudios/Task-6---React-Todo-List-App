@@ -7,7 +7,7 @@ const priorityClasses = {
   Low: 'bg-green-500 text-white dark:bg-green-700'
 };
 
-const TodoItem = ({ task, updateTask, deleteTask }) => {
+const TodoItem = ({ task, updateTaskStatus, deleteTask, startEdit }) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -25,11 +25,12 @@ const TodoItem = ({ task, updateTask, deleteTask }) => {
       <div className="flex space-x-2">
         <button onClick={() => deleteTask(task.id)} className="bg-red-700 text-white p-2 rounded">Delete</button>
         <button
-          onClick={() => updateTask({ ...task, status: task.status === 'Incomplete' ? 'Complete' : 'Incomplete' })}
+          onClick={() => updateTaskStatus(task.id)}
           className={`p-2 rounded ${task.status === 'Incomplete' ? 'bg-blue-700' : 'bg-gray-700'} text-white`}
         >
           {task.status === 'Incomplete' ? 'Mark as Complete' : 'Mark as Incomplete'}
         </button>
+        <button onClick={() => startEdit(task)} className="bg-yellow-500 text-white p-2 rounded">Edit</button>
       </div>
     </motion.div>
   );

@@ -39,7 +39,7 @@ const TodoItem = ({ task, updateTaskStatus, deleteTask, startEdit }) => {
           onClick={() => updateTaskStatus(task.id)} // Call the updateTaskStatus function with the task's id
           className={`p-2 rounded ${task.status === 'Incomplete' ? 'bg-blue-700' : 'bg-gray-700'} text-white`} // Apply the appropriate CSS class based on the task's status
         >
-          {task.status === 'Incomplete' ? 'Mark as Complete' : 'Mark as Incomplete'} // Display the appropriate button text based on the task's status
+          {task.status === 'Incomplete' ? 'Mark as Complete' : 'Mark as Incomplete'} 
         </button>
         {/* Render a button that starts the edit mode when clicked */}
         <button onClick={() => startEdit(task)} className="bg-yellow-500 text-white p-2 rounded">Edit</button>

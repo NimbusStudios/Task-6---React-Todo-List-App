@@ -8,15 +8,16 @@ import Profile from './pages/Profile';
 import ProtectedRoute from './components/ProtectedRoute';
 import { ThemeProvider } from './contexts/ThemeContext';
 import Header from './components/Header';
+import NavBar from './components/NavBar';
 
 // Define the main App component
 function App() {
-  // Check if user is already stored in localStorage, if not, set a default user
+  // Load user data from localStorage or create a default user if no users exist
   useEffect(() => {
-    const user = localStorage.getItem('user');
-    if (!user) {
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+    if (users.length === 0) {
       const defaultUser = { username: 'admin', password: 'admin123' };
-      localStorage.setItem('user', JSON.stringify(defaultUser));
+      localStorage.setItem('users', JSON.stringify([defaultUser]));
     }
   }, []);
 
@@ -25,13 +26,13 @@ function App() {
     <ThemeProvider>
       <Router>
         <div className="font-sans">
-          <Header />
+          <NavBar /> {/* Render the navigation bar */}
           <Routes>
-            <Route path="/" element={<Navigate to="/login" />} />  {/* Redirect root to login page */}
-            <Route path="/register" element={<Registration />} />  {/* Render Registration component */}
-            <Route path="/login" element={<Login />} />  {/* Render Login component */}
-            <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />  {/* Render Home component with ProtectedRoute */}
-            <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />  {/* Render Profile component with ProtectedRoute */}
+            <Route path="/" element={<Navigate to="/login" />} />  {/* Redirect root path to the login page */}
+            <Route path="/login" element={<Login />} />  {/* Render the Login page */}
+            <Route path="/register" element={<Registration />} />  {/* Render the Registration page */}
+            <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />  {/* Render the Home page with authentication */}
+            <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />  {/* Render the Profile page with authentication */}
           </Routes>
         </div>
       </Router>

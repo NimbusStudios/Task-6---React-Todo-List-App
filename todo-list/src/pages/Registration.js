@@ -23,7 +23,7 @@ const Registration = () => {
     <div className="flex justify-center items-center min-h-screen bg-gray-100 dark:bg-gray-900">
       <form onSubmit={handleRegister} className="bg-white dark:bg-gray-800 p-6 rounded shadow-md w-full max-w-sm">
         <h2 className="text-2xl font-semibold mb-4 dark:text-white">Register</h2>
-        {message && <p className="mb-4 text-red-500 dark:text-red-300">{message}</p>}
+        {message && <p className="mb-4 text-white-500 dark:text-white-100">{message}</p>}
         <input
           type="text"
           placeholder="Username"

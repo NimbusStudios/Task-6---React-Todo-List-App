@@ -42,7 +42,7 @@ const TodoItem = ({ task, updateTaskStatus, deleteTask, startEdit }) => {
           {task.status === 'Incomplete' ? 'Mark as Complete' : 'Mark as Incomplete'} 
         </button>
         {/* Render a button that starts the edit mode when clicked */}
-        <button onClick={() => startEdit(task)} className="bg-yellow-500 text-white p-2 rounded">Edit</button>
+        <button onClick={() => startEdit(task)} className="bg-black text-white p-2 rounded">Edit</button>
       </div>
     </motion.div>
   );

@@ -3,6 +3,10 @@ import React, { useState, useEffect } from 'react';
 const EditTask = ({ task, updateTask, cancelEdit }) => {
   const [updatedTask, setUpdatedTask] = useState(task);
 
+  useEffect(() => {
+    setUpdatedTask(task);
+  }, [task]);
+
   const handleUpdateTask = (e) => {
     e.preventDefault();
     updateTask(updatedTask);
@@ -61,3 +65,5 @@ const EditTask = ({ task, updateTask, cancelEdit }) => {
 };
 
 export default EditTask;
+
+
